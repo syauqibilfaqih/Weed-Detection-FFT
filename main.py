@@ -31,6 +31,7 @@ cv2.imshow("Edges Detected", edges_detected)
 #result = cv2.bitwise_and(image, image, mask=mask)
 #cv2.imshow("Result", result)
 
+cv2.waitKey(0)
 
 #Gray-Scaling
 
