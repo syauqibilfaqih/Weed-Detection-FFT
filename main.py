@@ -23,6 +23,20 @@ result= cv2.bitwise_and(image,image, mask= mask)
 cv2.imshow("Result",result)
 edges_detected = cv2.Canny(result,80,300)
 cv2.imshow("Edges Detected", edges_detected)
+
+
+windowsize_r = 8
+windowsize_c = 8
+
+img = edges_detected
+for r in range(0,img.shape[0] - windowsize_r, windowsize_r):
+    for c in range(0,img.shape[0] - windowsize_c, windowsize_c):
+        window = img[r:r+windowsize_r,c:c+windowsize_c]
+        hist = numpy.histogram(window,bins=256)
+        k = cv2.waitKey(0)
+        if k == 27:
+            cv2.destroyAllWindows()
+            
 #light_green = np.array([120,100,58.8])
 #dark_green = np.array([120, 100, 78.5])
 #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
