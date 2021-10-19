@@ -25,16 +25,16 @@ mask = cv2.inRange(hsv, dark_green, light_green)
 result= cv2.bitwise_and(image,image, mask= mask)
 #cv2.imshow("Result",result)
 edges_detected = cv2.Canny(result,80,300)
-#cv2.imshow("Edges Detected", edges_detected)
+cv2.imshow("Edges Detected", edges_detected)
 
-windowsize_r = 100
-windowsize_c = 114
+windowsize_r = 50
+windowsize_c = 50
 
 img = edges_detected
 y=len(range(0,img.shape[0] - windowsize_r, windowsize_r))
 x=len(range(0,img.shape[0] - windowsize_c, windowsize_c))
-#print(y)
-#print(x)
+print(y)
+print(x)
 print("Jumlah block yang dihasilkan : ",x*y)
 pictFilter=[[0 for x in range(x)] for y in range(y)] 
 y=0
@@ -55,9 +55,12 @@ for r in range(0,img.shape[0] - windowsize_r, windowsize_r):
     y=y+1
       
 #Pick a picture for 2FFT
-cv2.imshow('Pick',pictFilter[0][4])
+cv2.imshow('Pick',pictFilter[7][7])
 cv2.waitKey(0)
 
+fft2 = np.fft.fft2(pictFilter[7][7]) #2D-FFT for a block
+plt.imshow(abs(fft2))
+plt.show() #show the plot
 #Gray-Scaling
 
 
