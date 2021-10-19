@@ -6,6 +6,7 @@ from array import *
 
 y=0
 x=0
+
 #Load Image
 image = cv2.imread("images/Maize1000x714-1000x714.png")
 #cv2.imshow("Image", image)
@@ -25,10 +26,11 @@ mask = cv2.inRange(hsv, dark_green, light_green)
 result= cv2.bitwise_and(image,image, mask= mask)
 #cv2.imshow("Result",result)
 edges_detected = cv2.Canny(result,80,300)
-cv2.imshow("Edges Detected", edges_detected)
+#cv2.imshow("Edges Detected", edges_detected)
 
-windowsize_r = 50
-windowsize_c = 50
+#====================================================Size per Block=======================================
+windowsize_r = 15
+windowsize_c = 15
 
 img = edges_detected
 y=len(range(0,img.shape[0] - windowsize_r, windowsize_r))
@@ -53,15 +55,53 @@ for r in range(0,img.shape[0] - windowsize_r, windowsize_r):
             cv2.destroyAllWindows()
     x=0
     y=y+1
-      
+
+#=========================================================PERCOBAAN BLOCKS===================================      
 #Pick a picture for 2FFT
-cv2.imshow('Pick',pictFilter[7][7])
+#cv2.imshow('Pick',pictFilter[18][18])
+#cv2.waitKey(0)
+
+#Freq min
+#fft2 = np.fft.fft2(pictFilter[0][3]) #2D-FFT for a block
+#plt.imshow(abs(fft2))
+#print(sum(sum(abs(fft2))))
+#cv2.imshow('sedeng',abs(fft2))
+#plt.show() #show the plot
+#Freq sedeng
+#fft2 = np.fft.fft2(pictFilter[0][0]) #2D-FFT for a block
+#plt.imshow(abs(fft2))
+#print(sum(sum(abs(fft2))))
+#cv2.imshow('min',abs(fft2))
+#plt.show() #show the plot
+#Freq max
+#fft2 = np.fft.fft2(pictFilter[18][18]) #2D-FFT for a block
+#plt.imshow(abs(fft2))
+#print(sum(sum(abs(fft2))))
+#cv2.imshow('max',abs(fft2))
+#plt.show() #show the plot
+
+#================================================2D-FFT and Merge algorithm========================================
+y=len(range(0,img.shape[0] - windowsize_r, windowsize_r))
+x=len(range(0,img.shape[0] - windowsize_c, windowsize_c))
+v=0
+
+horizontal=np.hstack((abs(np.fft.fft2(pictFilter[v][0])),abs(np.fft.fft2(pictFilter[v][1]))))
+h=2
+while h<x-1:
+    horizontal=np.hstack((horizontal,abs(np.fft.fft2(pictFilter[v][h]))))
+    h=h+1
+vertikal=horizontal
+v=1
+while v<y :
+    horizontal=np.hstack((abs(np.fft.fft2(pictFilter[v][0])),abs(np.fft.fft2(pictFilter[v][1]))))
+    h=2
+    while h<x-1:
+        horizontal=np.hstack((horizontal,abs(np.fft.fft2(pictFilter[v][h]))))
+        h=h+1
+    vertikal=np.vstack((vertikal,horizontal))
+    v=v+1
+
+plt.imshow(vertikal)
+plt.show()
 cv2.waitKey(0)
-
-fft2 = np.fft.fft2(pictFilter[7][7]) #2D-FFT for a block
-plt.imshow(abs(fft2))
-plt.show() #show the plot
-#Gray-Scaling
-
-
-#Edge Detection
+#=================================================END===========================================================
