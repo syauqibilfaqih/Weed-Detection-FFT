@@ -104,4 +104,31 @@ while v<y :
 plt.imshow(vertikal)
 plt.show()
 cv2.waitKey(0)
-#=================================================END===========================================================
+#=================================================DENSITY FILTERING===========================================================
+#density filtering
+for r in range(0,img.shape[0] - windowsize_r, windowsize_r):
+    for c in range(0,img.shape[0] - windowsize_c, windowsize_c):
+        window = img[r:r+windowsize_r,c:c+windowsize_c]
+        hist = np.histogram(window,bins=8)
+        pictFilter[y][x]=window
+        pick_image= pictFilter[y][x]
+        hist = cv2.calcHist([pick_image],[0],None,[256],[0,256])
+        hist = [val[0] for val in hist]; 
+        #Generate a list of indices
+        indices = list(range(0, 256));
+        #Descending sort-by-key with histogram value as key
+        s = [(x,y) for y,x in sorted(zip(hist,indices), reverse=True)]
+        #Index of highest peak in histogram
+        index_of_highest_peak = s[0][0];
+        #Index of second highest peak in histogram
+        index_of_second_highest_peak = s[1][0];
+        if hist[index_of_second_highest_peak] >= 344 :
+            array = np.zeros([50, 50, 3], dtype = np.uint8)
+            # setting RGB color values as 255,255,255
+            array[:, :] = [255, 255, 255] 
+            # displaying the image
+            cv2.imshow("image", array)
+            
+        else : 
+            cv2.imshow("window", pictFilter[y][x])
+            cv2.waitKey(0)
